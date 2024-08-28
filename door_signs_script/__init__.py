@@ -1,1 +1,1 @@
-from .Door_Sign_Script_General import main
+from door_signs_script.Door_Sign_Script_General import main

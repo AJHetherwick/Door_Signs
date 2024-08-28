@@ -1,8 +1,0 @@
-README.md
-setup.py
-door_sign_generation.egg-info/PKG-INFO
-door_sign_generation.egg-info/SOURCES.txt
-door_sign_generation.egg-info/dependency_links.txt
-door_sign_generation.egg-info/top_level.txt
-door_signs_script/Door_Sign_Script_General.py
-door_signs_script/__init__.py
