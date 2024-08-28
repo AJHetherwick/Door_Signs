@@ -1,8 +1,9 @@
+LICENSE.txt
 README.md
+pyproject.toml
 setup.py
-door_signs_script/Door_Sign_Script_General.py
-door_signs_script/__init__.py
 door_signs_script.egg-info/PKG-INFO
 door_signs_script.egg-info/SOURCES.txt
 door_signs_script.egg-info/dependency_links.txt
+door_signs_script.egg-info/requires.txt
 door_signs_script.egg-info/top_level.txt

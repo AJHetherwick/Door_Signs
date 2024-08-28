@@ -1023,5 +1023,3 @@ def delete_rem_files(script_location: str, div: str) -> None:
               'Enter any key to close this script: ')
 
 
-if name == __main__:
-    main()
