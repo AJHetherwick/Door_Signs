@@ -674,9 +674,9 @@ def create_door_signs(final_print_labs: dict, smartsheet_xls, template_path: str
             long_writer_needed.addpage(output_pdf.pages[0])
 
     if door_sign_not_needed_labs:
-        long_writer_needed.write(needed_loc + "/Door_Signs_Needed_Long.pdf")
-    if door_sign_needed_labs:
         long_writer_not_needed.write(not_needed_loc + "/Door_Signs_Not_Needed_Long.pdf")
+    if door_sign_needed_labs:
+        long_writer_needed.write(needed_loc + "/Door_Signs_Needed_Long.pdf")
 
     print(f"\nThere are {len(labs_wo_personnel_data)} labs that do not have data in Smartsheet. You may still edit"
           f" and input data manually onto the door sign after downloading the file", end='')

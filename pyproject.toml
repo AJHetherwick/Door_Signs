@@ -1,6 +1,6 @@
 [project]
 name = "door_signs_script"
-version = "0.0.6"
+version = "0.0.7"
 authors = [
   { name="Adam Hetherwick", email="adamhetherwick@gmail.com" },
 ]
