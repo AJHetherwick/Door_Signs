@@ -592,6 +592,7 @@ def create_rel_folders(base_path: str) -> tuple[str, str]:
         for num in range(2, 100):
             if not os.path.exists(new_folder_loc + str(num)):
                 os.makedirs(new_folder_loc + str(num))
+                new_folder_loc = new_folder_loc + str(num)
                 break
     else:
         os.makedirs(new_folder_loc)
@@ -603,13 +604,14 @@ def create_rel_folders(base_path: str) -> tuple[str, str]:
     try:
         os.makedirs(needed_loc)
         os.makedirs(not_needed_loc)
+    except FileExistsError:
+        pass
     except OSError:
         _ = input("You do not have the sharing permissions needed to create door signs.\n"
                   "If it is a shared Google Drive, you must have at least a Content Manager permission.\n"
                   "If it is a regular Google Drive shared with you, you must have at least editing permissions.\n"
                   "Enter any key to close this script: ")
         sys.exit()
-
     return needed_loc, not_needed_loc
 
 
