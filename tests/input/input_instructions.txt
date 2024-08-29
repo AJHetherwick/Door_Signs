@@ -1,0 +1,20 @@
+Adam Hetherwick
+08/29/2024
+
+To run the test cases:
+- Go to MSD Shared Google Drive for door sign creation: https://drive.google.com/drive/folders/1R_HkNobnebCh3XHPnnm5fU0EnDEmNbXh
+- In the Door_Sign_Creation_Files folder, drag the MSD_Lab_Safety_DB.xlsx and QueryResult.csv files from this input folder into the 
+  Door_Sign_Creation_Files folder.
+- Open the Door_Sign_Script_MSD.ipynb file and select 'Runtime' > 'Run all'. If you are running the script on the same kernel 
+  multiple times, select 'Runtime' > 'Restart session and run all'.
+- When running the script, make sure to put 'msd' as the division when given the prompt.
+
+Notes:
+- Desired output to compare to is in the output folder.
+- If any significant changes were made to the script, one can edit the instructions in each of the shared Drive folders:
+	- MSD: https://drive.google.com/drive/folders/1R_HkNobnebCh3XHPnnm5fU0EnDEmNbXh
+	- ALS: https://drive.google.com/drive/folders/1g2XsLofrZLZkax4NEZHGqXORQqFpG6pG
+	- CSD: [in progress]
+- The script also keeps an archive of Smartsheet files and inputs them into the Smartsheet_Archive folder.
+- After each successful run of the script, the MSD_Lab_Safety_DB.xlsx and QueryResult.csv get reformatted 
+  to OLD_smartsheet_XX_XX_XXXX and OLD_queryresult_XX_XX_XXXX.

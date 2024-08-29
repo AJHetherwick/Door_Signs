@@ -78,7 +78,7 @@ def get_div() -> str:
     """Get the users' division"""
     div = ''
     while div.upper() not in ['MSD', 'ALS', 'CSD']:
-        div = input('Enter the division you are creating door signs for.'
+        div = input('Enter the division you are creating door signs for. '
                     'For example (MSD, ALS, CSD): ')
     return div.upper()
 
