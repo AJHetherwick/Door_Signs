@@ -18,3 +18,5 @@ Notes:
 - The script also keeps an archive of Smartsheet files and inputs them into the Smartsheet_Archive folder.
 - After each successful run of the script, the MSD_Lab_Safety_DB.xlsx and QueryResult.csv get reformatted 
   to OLD_smartsheet_XX_XX_XXXX and OLD_queryresult_XX_XX_XXXX.
+- User's will follow the instructions in their respective division Google Drives. 
+	- An example of such instructions for MSD are in the tests folder.
