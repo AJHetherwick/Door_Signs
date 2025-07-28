@@ -294,10 +294,12 @@ def get_file_locations(
         )
 
         # If the OLD_smartsheet isn't found, copy the new smartsheet and print all labs (respone=1)
-        shutil.copyfile(smartsheet_file_location,
-                        base_path + "OLD_smartsheet_" + date.today().strftime("%m_%d_%Y") + ".xlsx")
-        old_smartsheet_file_location = base_path + "OLD_smartsheet_" + date.today().strftime("%m_%d_%Y") + ".xlsx"
-        response = '1'
+        old_smartsheet_file_location = os.path.join(
+            script_location,
+            "OLD_smartsheet_" + date.today().strftime("%m_%d_%Y") + ".xlsx",
+        )
+        shutil.copyfile(smartsheet_file_location, old_smartsheet_file_location)
+        response = "1"
 
     if not old_report_file_location:
         _ = input(
@@ -308,10 +310,12 @@ def get_file_locations(
         )
 
         # If the OLD_QueryResult isn't found, copy the new report and print all labs (response=1)
-        shutil.copyfile(report_file_location,
-                        base_path + "OLD_QueryResult_" + date.today().strftime("%m_%d_%Y") + ".csv")
-        old_report_file_location = base_path + "OLD_QueryResult_" + date.today().strftime("%m_%d_%Y") + ".csv"
-        response = '1'
+        old_report_file_location = os.path.join(
+            script_location,
+            "OLD_QueryResult_" + date.today().strftime("%m_%d_%Y") + ".csv",
+        )
+        shutil.copyfile(report_file_location, old_report_file_location)
+        response = "1"
 
     template_path = script_location + "/Door_Sign_Template.pdf"
     if not os.path.exists(template_path):
@@ -439,35 +443,56 @@ def changed_personnel_check(smartsheet_xls, old_smartsheet_xls, div: str) -> lis
 
     changed_personnel_labs = []
 
-    relevant_cols = ['Lab Safety Lead Name', 'Lab Safety Lead Office Location', 'Lab Safety Lead Office Phone Number',
-                     'Lab Safety Lead Mobile Phone Number', 'Backup Safety Lead Name',
-                     'Backup Safety Lead Office Location',
-                     'Backup Safety Lead Office Phone Number', 'Backup Safety Lead Mobile Phone Number',
-                     'Building Manager Name',
-                     'Building Manager Office Location', 'Building Manager Office Phone Number',
-                     'Building Manager Mobile Phone Number',
-                     'Building and Lab Number', 'Door Sign Needed?']
+    relevant_cols = [
+        "Lab Safety Lead Name",
+        "Lab Safety Lead Office Location",
+        "Lab Safety Lead Office Phone Number",
+        "Lab Safety Lead Mobile Phone Number",
+        "Backup Safety Lead Name",
+        "Backup Safety Lead Office Location",
+        "Backup Safety Lead Office Phone Number",
+        "Backup Safety Lead Mobile Phone Number",
+        "Building Manager Name",
+        "Building Manager Office Location",
+        "Building Manager Office Phone Number",
+        "Building Manager Mobile Phone Number",
+        "Building and Lab Number",
+        "Door Sign Needed?",
+    ]
 
-    if div == 'ALS':
-        append_cols = ['Minimum Area PPE', 'Secondary Backup Safety Lead Name',
-                       'Secondary Backup Safety Lead Office Location',
-                       'Secondary Backup Safety Lead Office Phone Number',
-                       'Secondary Backup Safety Lead Mobile Phone Number',
-                       'ALS Facility Manager Name', 'ALS Facility Manager Office Location',
-                       'ALS Facility Manager Office Phone Number',
-                       'ALS Facility Manager Mobile Phone Number', 'ALS Safety Coordinator Name',
-                       'ALS Safety Coordinator Office Location',
-                       'ALS Safety Coordinator Office Phone Number', 'ALS Safety Coordinator Mobile Phone Number']
+    if div == "ALS":
+        append_cols = [
+            "Minimum Area PPE",
+            "Secondary Backup Safety Lead Name",
+            "Secondary Backup Safety Lead Office Location",
+            "Secondary Backup Safety Lead Office Phone Number",
+            "Secondary Backup Safety Lead Mobile Phone Number",
+            "ALS Facility Manager Name",
+            "ALS Facility Manager Office Location",
+            "ALS Facility Manager Office Phone Number",
+            "ALS Facility Manager Mobile Phone Number",
+            "ALS Safety Coordinator Name",
+            "ALS Safety Coordinator Office Location",
+            "ALS Safety Coordinator Office Phone Number",
+            "ALS Safety Coordinator Mobile Phone Number",
+        ]
         relevant_cols += append_cols
 
-    elif div == 'MSD':
-        append_cols = ['PI Name', 'PI Office Location', 'PI Office Phone Number', 'PI Mobile Phone Number',
-                       'MSD EH&S Tech Name',
-                       'MSD EH&S Tech Office Location', 'MSD EH&S Tech Office Phone Number',
-                       'MSD EH&S Tech Mobile Phone Number',
-                       'MSD Safety Coordinator Name', 'MSD Safety Coordinator Office Location',
-                       'MSD Safety Coordinator Office Phone Number',
-                       'MSD Safety Coordinator Mobile Phone Number']
+    elif div == "MSD":
+        append_cols = [
+            "PI Name",
+            "PI Office Location",
+            "PI Office Phone Number",
+            "PI Mobile Phone Number",
+            "MSD EH&S Manager Name",
+            "MSD EH&S Manager Office Location",
+            "MSD EH&S Manager Office Phone Number",
+            "MSD EH&S Manager Mobile Phone Number",
+            "MSD Safety Coordinator Name",
+            "MSD Safety Coordinator Office Location",
+            "MSD Safety Coordinator Office Phone Number",
+            "MSD Safety Coordinator Mobile Phone Number",
+        ]
         relevant_cols += append_cols
 
     # Make sure all the columns are titled correctly and still in the smartsheet
@@ -1000,98 +1025,148 @@ def get_personnel_data(
     index = list(smartsheet["Building and Lab Number"]).index(lab)
     fields_to_fill = {}
 
-    if div == 'MSD':
-        fields_to_fill = {"Building": building,
-                          "Room": room,
-                          "Applicable_WPC": list_to_string(wpcs),
-                          "PI_Name": list(smartsheet["PI Name"])[index],
-                          "PI_Office_Location": list(smartsheet["PI Office Location"])[index],
-                          "PI_Work_Phone": list(smartsheet["PI Office Phone Number"])[index],
-                          "PI_Other_Phone": list(smartsheet["PI Mobile Phone Number"])[index],
-                          "Area_Safety_Leader_Name": list(smartsheet["Lab Safety Lead Name"])[index],
-                          "Area_Safety_Leader_Office_Location": list(smartsheet["Lab Safety Lead Office Location"])[
-                              index],
-                          "Area_Safety_Leader_Work_Phone": list(smartsheet["Lab Safety Lead Office Phone Number"])[
-                              index],
-                          "Area_Safety_Leader_Other_Phone": list(smartsheet["Lab Safety Lead Mobile Phone Number"])[
-                              index],
-                          "Additional_Contacts_Name": list(smartsheet["Backup Safety Lead Name"])[index],
-                          "Additional_Contacts_Office_Location": list(smartsheet["Backup Safety Lead Office Location"])[
-                              index],
-                          "Additional_Contacts_Work_Phone": list(smartsheet["Backup Safety Lead Office Phone Number"])[
-                              index],
-                          "Additional_Contacts_Other_Phone": list(smartsheet["Backup Safety Lead Mobile Phone Number"])[
-                              index],
-                          "MSD_EHS_Tech_Name": list(smartsheet["MSD EH&S Tech Name"])[index],
-                          "MSD_EHS_Tech_Office_Location": list(smartsheet["MSD EH&S Tech Office Location"])[index],
-                          "MSD_EHS_Tech_Work_Phone": list(smartsheet["MSD EH&S Tech Office Phone Number"])[index],
-                          "MSD_EHS_Tech_Other_Phone": list(smartsheet["MSD EH&S Tech Mobile Phone Number"])[index],
-                          "Building_Manager_Name": list(smartsheet["Building Manager Name"])[index],
-                          "Building_Manager_Office_Location": list(smartsheet["Building Manager Office Location"])[
-                              index],
-                          "Building_Manager_Work_Phone": list(smartsheet["Building Manager Office Phone Number"])[
-                              index],
-                          "Building_Manager_Other_Phone": list(smartsheet["Building Manager Mobile Phone Number"])[
-                              index],
-                          "Div_Safety_Coordinator_Name": list(smartsheet["MSD Safety Coordinator Name"])[index],
-                          "Div_Safety_Coordinator_Office_Location":
-                              list(smartsheet["MSD Safety Coordinator Office Location"])[index],
-                          "Div_Safety_Coordinator_Work_Phone":
-                              list(smartsheet["MSD Safety Coordinator Office Phone Number"])[index],
-                          "Div_Safety_Coordinator_Other_Phone":
-                              list(smartsheet["MSD Safety Coordinator Mobile Phone Number"])[index],
-                          "Date_Completed": date.today().strftime("%m/%d/%Y")
-                          }
+    if div == "MSD":
+        fields_to_fill = {
+            "Building": building,
+            "Room": room,
+            "Applicable_WPC": list_to_string(wpcs),
+            "PI_Name": list(smartsheet["PI Name"])[index],
+            "PI_Office_Location": list(smartsheet["PI Office Location"])[index],
+            "PI_Work_Phone": list(smartsheet["PI Office Phone Number"])[index],
+            "PI_Other_Phone": list(smartsheet["PI Mobile Phone Number"])[index],
+            "Area_Safety_Leader_Name": list(smartsheet["Lab Safety Lead Name"])[index],
+            "Area_Safety_Leader_Office_Location": list(
+                smartsheet["Lab Safety Lead Office Location"]
+            )[index],
+            "Area_Safety_Leader_Work_Phone": list(
+                smartsheet["Lab Safety Lead Office Phone Number"]
+            )[index],
+            "Area_Safety_Leader_Other_Phone": list(
+                smartsheet["Lab Safety Lead Mobile Phone Number"]
+            )[index],
+            "Additional_Contacts_Name": list(smartsheet["Backup Safety Lead Name"])[
+                index
+            ],
+            "Additional_Contacts_Office_Location": list(
+                smartsheet["Backup Safety Lead Office Location"]
+            )[index],
+            "Additional_Contacts_Work_Phone": list(
+                smartsheet["Backup Safety Lead Office Phone Number"]
+            )[index],
+            "Additional_Contacts_Other_Phone": list(
+                smartsheet["Backup Safety Lead Mobile Phone Number"]
+            )[index],
+            "MSD_EHS_Tech_Name": list(smartsheet["MSD EH&S Manager Name"])[index],
+            "MSD_EHS_Tech_Office_Location": list(
+                smartsheet["MSD EH&S Manager Office Location"]
+            )[index],
+            "MSD_EHS_Tech_Work_Phone": list(
+                smartsheet["MSD EH&S Manager Office Phone Number"]
+            )[index],
+            "MSD_EHS_Tech_Other_Phone": list(
+                smartsheet["MSD EH&S Manager Mobile Phone Number"]
+            )[index],
+            "Building_Manager_Name": list(smartsheet["Building Manager Name"])[index],
+            "Building_Manager_Office_Location": list(
+                smartsheet["Building Manager Office Location"]
+            )[index],
+            "Building_Manager_Work_Phone": list(
+                smartsheet["Building Manager Office Phone Number"]
+            )[index],
+            "Building_Manager_Other_Phone": list(
+                smartsheet["Building Manager Mobile Phone Number"]
+            )[index],
+            "Div_Safety_Coordinator_Name": list(
+                smartsheet["MSD Safety Coordinator Name"]
+            )[index],
+            "Div_Safety_Coordinator_Office_Location": list(
+                smartsheet["MSD Safety Coordinator Office Location"]
+            )[index],
+            "Div_Safety_Coordinator_Work_Phone": list(
+                smartsheet["MSD Safety Coordinator Office Phone Number"]
+            )[index],
+            "Div_Safety_Coordinator_Other_Phone": list(
+                smartsheet["MSD Safety Coordinator Mobile Phone Number"]
+            )[index],
+            "Date_Completed": date.today().strftime("%m/%d/%Y"),
+        }
 
-    if div == 'ALS':
-        fields_to_fill = {"Building": building,
-                          "Room": room,
-                          "Min_PPE_Req": list(smartsheet["Minimum Area PPE"])[index],
-                          "Applicable_WPC": list_to_string(wpcs),
-                          "Area_Safety_Leader_Name": list(smartsheet["Lab Safety Lead Name"])[index],
-                          "Area_Safety_Leader_Office_Location": list(smartsheet["Lab Safety Lead Office Location"])[
-                              index],
-                          "Area_Safety_Leader_Work_Phone": list(smartsheet["Lab Safety Lead Office Phone Number"])[
-                              index],
-                          "Area_Safety_Leader_Other_Phone": list(smartsheet["Lab Safety Lead Mobile Phone Number"])[
-                              index],
-                          "Additional_Contacts_Name": list(smartsheet["Backup Safety Lead Name"])[index],
-                          "Additional_Contacts_Office_Location": list(smartsheet["Backup Safety Lead Office Location"])[
-                              index],
-                          "Additional_Contacts_Work_Phone": list(smartsheet["Backup Safety Lead Office Phone Number"])[
-                              index],
-                          "Additional_Contacts_Other_Phone": list(smartsheet["Backup Safety Lead Mobile Phone Number"])[
-                              index],
-                          "Secondary_Contacts_Name": list(smartsheet["Secondary Backup Safety Lead Name"])[index],
-                          "Secondary_Contacts_Office_Location":
-                              list(smartsheet["Secondary Backup Safety Lead Office Location"])[index],
-                          "Secondary_Contacts_Work_Phone":
-                              list(smartsheet["Secondary Backup Safety Lead Office Phone Number"])[index],
-                          "Secondary_Contacts_Other_Phone":
-                              list(smartsheet["Secondary Backup Safety Lead Mobile Phone Number"])[index],
-                          "ALS_Facility_Manager_Name": list(smartsheet["ALS Facility Manager Name"])[index],
-                          "ALS_Facility_Manager_Office_Location":
-                              list(smartsheet["ALS Facility Manager Office Location"])[index],
-                          "ALS_Facility_Manager_Work_Phone":
-                              list(smartsheet["ALS Facility Manager Office Phone Number"])[index],
-                          "ALS_Facility_Manager_Other_Phone":
-                              list(smartsheet["ALS Facility Manager Mobile Phone Number"])[index],
-                          "Building_Manager_Name": list(smartsheet["Building Manager Name"])[index],
-                          "Building_Manager_Office_Location": list(smartsheet["Building Manager Office Location"])[
-                              index],
-                          "Building_Manager_Work_Phone": list(smartsheet["Building Manager Office Phone Number"])[
-                              index],
-                          "Building_Manager_Other_Phone": list(smartsheet["Building Manager Mobile Phone Number"])[
-                              index],
-                          "Div_Safety_Coordinator_Name": list(smartsheet["ALS Safety Coordinator Name"])[index],
-                          "Div_Safety_Coordinator_Office_Location":
-                              list(smartsheet["ALS Safety Coordinator Office Location"])[index],
-                          "Div_Safety_Coordinator_Work_Phone":
-                              list(smartsheet["ALS Safety Coordinator Office Phone Number"])[index],
-                          "Div_Safety_Coordinator_Other_Phone":
-                              list(smartsheet["ALS Safety Coordinator Mobile Phone Number"])[index],
-                          "Date_Completed": date.today().strftime("%m/%d/%Y")
-                          }
+    if div == "ALS":
+        fields_to_fill = {
+            "Building": building,
+            "Room": room,
+            "Min_PPE_Req": list(smartsheet["Minimum Area PPE"])[index],
+            "Applicable_WPC": list_to_string(wpcs),
+            "Area_Safety_Leader_Name": list(smartsheet["Lab Safety Lead Name"])[index],
+            "Area_Safety_Leader_Office_Location": list(
+                smartsheet["Lab Safety Lead Office Location"]
+            )[index],
+            "Area_Safety_Leader_Work_Phone": list(
+                smartsheet["Lab Safety Lead Office Phone Number"]
+            )[index],
+            "Area_Safety_Leader_Other_Phone": list(
+                smartsheet["Lab Safety Lead Mobile Phone Number"]
+            )[index],
+            "Additional_Contacts_Name": list(smartsheet["Backup Safety Lead Name"])[
+                index
+            ],
+            "Additional_Contacts_Office_Location": list(
+                smartsheet["Backup Safety Lead Office Location"]
+            )[index],
+            "Additional_Contacts_Work_Phone": list(
+                smartsheet["Backup Safety Lead Office Phone Number"]
+            )[index],
+            "Additional_Contacts_Other_Phone": list(
+                smartsheet["Backup Safety Lead Mobile Phone Number"]
+            )[index],
+            "Secondary_Contacts_Name": list(
+                smartsheet["Secondary Backup Safety Lead Name"]
+            )[index],
+            "Secondary_Contacts_Office_Location": list(
+                smartsheet["Secondary Backup Safety Lead Office Location"]
+            )[index],
+            "Secondary_Contacts_Work_Phone": list(
+                smartsheet["Secondary Backup Safety Lead Office Phone Number"]
+            )[index],
+            "Secondary_Contacts_Other_Phone": list(
+                smartsheet["Secondary Backup Safety Lead Mobile Phone Number"]
+            )[index],
+            "ALS_Facility_Manager_Name": list(smartsheet["ALS Facility Manager Name"])[
+                index
+            ],
+            "ALS_Facility_Manager_Office_Location": list(
+                smartsheet["ALS Facility Manager Office Location"]
+            )[index],
+            "ALS_Facility_Manager_Work_Phone": list(
+                smartsheet["ALS Facility Manager Office Phone Number"]
+            )[index],
+            "ALS_Facility_Manager_Other_Phone": list(
+                smartsheet["ALS Facility Manager Mobile Phone Number"]
+            )[index],
+            "Building_Manager_Name": list(smartsheet["Building Manager Name"])[index],
+            "Building_Manager_Office_Location": list(
+                smartsheet["Building Manager Office Location"]
+            )[index],
+            "Building_Manager_Work_Phone": list(
+                smartsheet["Building Manager Office Phone Number"]
+            )[index],
+            "Building_Manager_Other_Phone": list(
+                smartsheet["Building Manager Mobile Phone Number"]
+            )[index],
+            "Div_Safety_Coordinator_Name": list(
+                smartsheet["ALS Safety Coordinator Name"]
+            )[index],
+            "Div_Safety_Coordinator_Office_Location": list(
+                smartsheet["ALS Safety Coordinator Office Location"]
+            )[index],
+            "Div_Safety_Coordinator_Work_Phone": list(
+                smartsheet["ALS Safety Coordinator Office Phone Number"]
+            )[index],
+            "Div_Safety_Coordinator_Other_Phone": list(
+                smartsheet["ALS Safety Coordinator Mobile Phone Number"]
+            )[index],
+            "Date_Completed": date.today().strftime("%m/%d/%Y"),
+        }
 
     return fields_to_fill
 
